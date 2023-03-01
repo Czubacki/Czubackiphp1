@@ -1,0 +1,17 @@
+{
+    "name": "czubacki/czubackiphp",
+    "description": "zadanie",
+    "type": "projekt",
+    "autoload": {
+        "psr-4": {
+            "Czubacki\\Czubackiphp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Czubacki",
+            "email": "filipczubacki@wp.pl"
+        }
+    ],
+    "require": {}
+}
