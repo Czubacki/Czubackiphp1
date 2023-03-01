@@ -15,8 +15,8 @@ class Post {
       
         global $db;
         
-        $query = $db->prepare("SELECT * FROM post ORDER BY timestamp DESC LIMIT 1");
-        
+        $query = $db->prepare("SELECT * FROM tabela1 ORDER BY timestamp DESC LIMIT 1");
+       
         $query->execute();
         
         $result = $query->get_result();
@@ -26,6 +26,29 @@ class Post {
         $p = new Post($row['id'], $row['filename'], $row['timestamp']);
         
         return $p; 
+    }
+    
+    static function getPage(int $pageNumber = 1, int $postsPerPage = 10) : array {
+        
+        global $db;
+        
+        $query = $db->prepare("SELECT * FROM tabela1 ORDER BY timestamp DESC LIMIT ? OFFSET ?");
+       
+        $offset = ($pageNumber-1)*$postsPerPage;
+      
+        $query->bind_param('ii', $postsPerPage, $offset);
+       
+        $query->execute();
+     
+        $result = $query->get_result();
+       
+        $postsArray = array();
+       
+        while($row = $result->fetch_assoc()) {
+            $post = new Post($row['id'],$row['filename'],$row['timestamp']);
+            array_push($postsArray, $post);
+        }
+        return $postsArray;
     }
     
     static function upload(string $tempFileName) {
@@ -57,7 +80,7 @@ class Post {
         
         global $db;
        
-        $query = $db->prepare("INSERT INTO post VALUES(NULL, ?, ?)");
+        $query = $db->prepare("INSERT INTO tabela1 VALUES(NULL, ?, ?)");
        
         $dbTimestamp = date("Y-m-d H:i:s");
         
