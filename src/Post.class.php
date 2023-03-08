@@ -10,6 +10,14 @@ class Post {
         $this->filename = $f;
         $this->timestamp = $t;
     }
+
+    public function getFilename() : string {
+        return $this->filename;
+    }
+    public function getTimestamp() : string {
+        return $this->timestamp;
+    }
+    
     
     static function getLast() : Post {
       
