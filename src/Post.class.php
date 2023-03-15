@@ -4,11 +4,13 @@ class Post {
     private int $id;
     private string $filename;
     private string $timestamp;
-
-    function __construct(int $i, string $f, string $t) {
+    private string $Tytul;
+    
+    function __construct(int $i, string $f, string $t, string $u) {
         $this->id = $i;
         $this->filename = $f;
         $this->timestamp = $t;
+        $this->Tytul = $u;
     }
 
     public function getFilename() : string {
@@ -17,6 +19,10 @@ class Post {
     public function getTimestamp() : string {
         return $this->timestamp;
     }
+    public function getTytul1() : string {
+        return $this->Tytul;
+    }
+    
     
     
     static function getLast() : Post {
@@ -31,7 +37,7 @@ class Post {
         
         $row = $result->fetch_assoc();
         
-        $p = new Post($row['id'], $row['filename'], $row['timestamp']);
+        $p = new Post($row['id'], $row['filename'], $row['timestamp'], $row['Tytul']);
         
         return $p; 
     }
@@ -53,7 +59,7 @@ class Post {
         $postsArray = array();
        
         while($row = $result->fetch_assoc()) {
-            $post = new Post($row['id'],$row['filename'],$row['timestamp']);
+            $post = new Post($row['id'],$row['filename'],$row['timestamp'], $row['Tytul']);
             array_push($postsArray, $post);
         }
         return $postsArray;
@@ -75,6 +81,8 @@ class Post {
         
         $newFileName = $targetDir . $hash . ".webp";
         
+        $newTytul = "chui1";
+        
         if(file_exists($newFileName)) {
             die("BŁĄD: Podany plik już istnieje!");
         }
@@ -88,11 +96,13 @@ class Post {
         
         global $db;
        
-        $query = $db->prepare("INSERT INTO tabela1 VALUES(NULL, ?, ?)");
+        $query = $db->prepare("INSERT INTO tabela1 VALUES(NULL, ?, ?, ?)");
        
         $dbTimestamp = date("Y-m-d H:i:s");
         
-        $query->bind_param("ss", $dbTimestamp, $newFileName);
+        
+        
+        $query->bind_param("sss", $dbTimestamp, $newFileName, $newTytul);
         if(!$query->execute())
             die("Błąd zapisu do bazy danych");
 
