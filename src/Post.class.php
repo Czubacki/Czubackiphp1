@@ -5,12 +5,19 @@ class Post {
     private string $filename;
     private string $timestamp;
     private string $Tytul;
+    private string $authorId;
+    private string $authorName;
     
-    function __construct(int $i, string $f, string $t, string $u) {
+    
+    function __construct(int $i, string $f, string $t, string $u, int $authorId) {
         $this->id = $i;
         $this->filename = $f;
         $this->timestamp = $t;
         $this->Tytul = $u;
+        $this->authorId = $authorId;
+        
+        global $db;
+        $this->authorName = User::getNameById($this->authorId);
     }
 
     public function getFilename() : string {
@@ -22,7 +29,9 @@ class Post {
     public function getTytul1() : string {
         return $this->Tytul;
     }
-    
+    public function getAuthorName() : string {
+        return $this->authorName;
+    }
     
     
     static function getLast() : Post {
@@ -37,7 +46,7 @@ class Post {
         
         $row = $result->fetch_assoc();
         
-        $p = new Post($row['id'], $row['filename'], $row['timestamp'], $row['Tytul']);
+        $p = new Post($row['id'], $row['filename'], $row['timestamp'], $row['Tytul'], $row['userId']);
         
         return $p; 
     }
@@ -59,7 +68,7 @@ class Post {
         $postsArray = array();
        
         while($row = $result->fetch_assoc()) {
-            $post = new Post($row['id'],$row['filename'],$row['timestamp'], $row['Tytul']);
+            $post = new Post($row['id'],$row['filename'],$row['timestamp'], $row['Tytul'], $row['userId']);
             array_push($postsArray, $post);
         }
         return $postsArray;
@@ -96,13 +105,13 @@ class Post {
         
         global $db;
        
-        $query = $db->prepare("INSERT INTO tabela1 VALUES(NULL, ?, ?, ?)");
+        $query = $db->prepare("INSERT INTO tabela1 VALUES(NULL, ?, ?, ?, ?)");
        
         $dbTimestamp = date("Y-m-d H:i:s");
         
         
         
-        $query->bind_param("sss", $dbTimestamp, $newFileName, $newTytul);
+        $query->bind_param("sssi", $dbTimestamp, $newFileName, $newTytul, $userId);
         if(!$query->execute())
             die("Błąd zapisu do bazy danych");
 
