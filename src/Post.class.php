@@ -9,11 +9,11 @@ class Post {
     private string $authorName;
     
     
-    function __construct(int $i, string $f, string $t, string $u, int $authorId) {
+    function __construct(int $i, string $f, string $t, string $Tytul, int $authorId) {
         $this->id = $i;
         $this->filename = $f;
         $this->timestamp = $t;
-        $this->Tytul = $u;
+        $this->Tytul = $Tytul;
         $this->authorId = $authorId;
         
         global $db;
@@ -74,7 +74,7 @@ class Post {
         return $postsArray;
     }
     
-    static function upload(string $tempFileName) {
+    static function upload(string $tempFileName, string $Tytul, int $userId) {
         
         $targetDir = "img/";
        
@@ -90,7 +90,6 @@ class Post {
         
         $newFileName = $targetDir . $hash . ".webp";
         
-        $newTytul = "chui1";
         
         if(file_exists($newFileName)) {
             die("BŁĄD: Podany plik już istnieje!");
@@ -111,10 +110,16 @@ class Post {
         
         
         
-        $query->bind_param("sssi", $dbTimestamp, $newFileName, $newTytul, $userId);
+        $query->bind_param("sssi", $dbTimestamp, $newFileName, $Tytul, $userId);
         if(!$query->execute())
-            die("Błąd zapisu do bazy danych");
+            die("Błąd zapisu do bazy danych2");
 
+    }
+    public static function remove($id) : bool {
+        global $db;
+        $query = $db->prepare("UPDATE post SET removed = 1 WHERE id = ?");
+        $query->bind_param("i", $id);
+        return $query->execute();
     }
 }
 

@@ -22,17 +22,22 @@ Route::add('/upload', function() {
   
   global $twig;
   $twigData = array("pageTitle" => "Wgraj mema");
-  
-  if(isset($_SESSION['user']))
+  if(User::isAuth())
+  {
       $twigData['user'] = $_SESSION['user'];
-  $twig->display("upload.html.twig", $twigData);
+      $twig->display("upload.html.twig", $twigData);
+  } else {
+      http_response_code(403);
+  }
+      
 });
+  
   
   Route::add('/upload', function() {
     
     global $twig;
     if(isset($_POST['submit']))  {
-        Post::upload($_FILES['uploadedFile']['tmp_name']);
+        Post::upload($_FILES['uploadedFile']['tmp_name'], $_POST['Tytul'], $_POST['userId']);
     }
     header("Location: http://localhost/CzubackiPHP/pub");
 }, 'post');
@@ -62,9 +67,33 @@ Route::add('/register', function() {
     if(isset($_POST['submit'])) {
         User::login($_POST['email'], $_POST['password']);
         header("Location: http://localhost/CzubackiPHP/pub");
-    }
+    }  else {
+      
+      $twigData = array('pageTitle' => "Zaloguj użytkownika",
+                          "message" => "Niepoprawny login lub hasło!");
+      $twig->display("login.html.twig", $twigData);
+  }
 }, 'post');
 
+Route::add('/admin', function()  {
+  global $twig;
+  
+  if(User::isAuth()) {
+      $postArray = Post::getPage(1,100);
+      $twigData = array("postArray" => $postArray);
+      $twig->display("admin.html.twig", $twigData);
+  } else {
+      http_response_code(403);
+  }
+});
+Route::add('/admin/remove/([0-9]*)', function($id) {
+  if(Post::remove($id)) {
+      
+      header("Location: http://localhost/CzubackiPHP/pub/admin/");
+  } else {
+      die("Nie udało się usunąć podanego obrazka");
+  }
+});
 
 Route::run('/CzubackiPHP/pub');
 ?>

@@ -60,7 +60,7 @@
         $dbTimestamp = date("Y-m-d H:i:s");
         $query->bind_param("ss", $dbTimestamp, $hash);
         if(!$query->execute())
-            die("Błąd zapisu do bazy danych");
+            die("Błąd zapisu do bazy danych1");
 
         echo "Plik został poprawnie wgrany na serwer";
     }
