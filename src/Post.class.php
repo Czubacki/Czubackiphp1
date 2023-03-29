@@ -32,7 +32,9 @@ class Post {
     public function getAuthorName() : string {
         return $this->authorName;
     }
-    
+    public function getId() : int {
+        return $this->id;
+    }
     
     static function getLast() : Post {
       
@@ -55,7 +57,7 @@ class Post {
         
         global $db;
         
-        $query = $db->prepare("SELECT * FROM tabela1 ORDER BY timestamp DESC LIMIT ? OFFSET ?");
+        $query = $db->prepare("SELECT * FROM tabela1 WHERE removed = 0 ORDER BY timestamp DESC LIMIT ? OFFSET ?");
        
         $offset = ($pageNumber-1)*$postsPerPage;
       
@@ -104,12 +106,12 @@ class Post {
         
         global $db;
        
-        $query = $db->prepare("INSERT INTO tabela1 VALUES(NULL, ?, ?, ?, ?)");
+        $query = $db->prepare("INSERT INTO tabela1 VALUES(NULL, ?, ?, ?, ?, 0)");
        
         $dbTimestamp = date("Y-m-d H:i:s");
         
         
-        
+        var_dump($db);
         $query->bind_param("sssi", $dbTimestamp, $newFileName, $Tytul, $userId);
         if(!$query->execute())
             die("Błąd zapisu do bazy danych2");
@@ -117,7 +119,7 @@ class Post {
     }
     public static function remove($id) : bool {
         global $db;
-        $query = $db->prepare("UPDATE post SET removed = 1 WHERE id = ?");
+        $query = $db->prepare("UPDATE tabela1 SET removed = 1 WHERE id = ?");
         $query->bind_param("i", $id);
         return $query->execute();
     }
