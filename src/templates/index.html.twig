@@ -1,12 +1,18 @@
 {% include 'header.html.twig' %}
-<div id="pageContainer">
-    <h1>{{pageTitle}}</h1>
+<head>
+    
+    <link rel="stylesheet" type="text/css" href="style1.css">
+    </head>
+   
+    <div id="pageContainer">
+        
+    <h1 class="h1">{{pageTitle}}</h1>
     {# jeśli użytkownik jest zalogowany to pokaż #}
     {% if user is defined %}
-    <div id="loggedUser">Zalogowany użytkownik: {{ user.getName() }} </div>
+    <div id="loggedUser" class="div">Zalogowany użytkownik: {{ user.getName() }} </div>
     {% endif %}
     {% for post in postArray %}
-    <div id="post">
+    <div id="post" class="div#post">
         <h2> Tytuł obrazka: {{ post.getTytul1() }} </h2>
         <img src="{{ post.getFilename() }}">
         <h6>Autor: {{post.getAuthorName() }}</h6>
