@@ -123,6 +123,7 @@ class Post {
         $query->bind_param("i", $id);
         return $query->execute();
     }
+    
 }
 
 ?>
