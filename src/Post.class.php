@@ -7,6 +7,7 @@ class Post {
     private string $Tytul;
     private string $authorId;
     private string $authorName;
+    private int $score;
     
     
     function __construct(int $i, string $f, string $t, string $Tytul, int $authorId) {
@@ -18,6 +19,7 @@ class Post {
         
         global $db;
         $this->authorName = User::getNameById($this->authorId);
+        $this->score = Vote::getScore($this->id);
     }
 
     public function getFilename() : string {
@@ -34,6 +36,9 @@ class Post {
     }
     public function getId() : int {
         return $this->id;
+    }
+    public function getScore() : int {
+        return $this->score;
     }
     
     static function getLast() : Post {

@@ -15,6 +15,7 @@
     <div id="post" class="div#post">
         <h2> Tytuł obrazka: {{ post.getTytul1() }} </h2>
         <img src="{{ post.getFilename() }}">
+        <h6>Punkty: {{post.getScore() }}</h6>
         <h6>Autor: {{post.getAuthorName() }}</h6>
         <h6>Data dodania: {{ post.getTimestamp() }} </h6>
         
