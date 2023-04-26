@@ -7,10 +7,11 @@
     {% endif %}
     {% for post in postArray %}
     <div id="post">
-        <h2>{{ post.getTitle() }} </h2>
+        <h2> Tytuł obrazka: {{ post.getTytul1() }} </h2>
         <img src="{{ post.getFilename() }}">
         <h6>Autor: {{post.getAuthorName() }}</h6>
         <h6>Data dodania: {{ post.getTimestamp() }} </h6>
+        
       
 
 
